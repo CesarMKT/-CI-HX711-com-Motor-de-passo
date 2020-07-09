@@ -56,73 +56,73 @@ void menu4();
 //==============================================================================================================================================================================================================================
 // --- Variáveis Globais ---
 #define   menu_max   4
-unsigned long convert=0;                      //  variavel recebida do HX711
-unsigned long previousMillis = 0;           //  will store last time LED was updated HX711
-unsigned long M1_previousMillis = 0;            // ultimo passo do motor 1
-const long interval = 20;                   //  original 100 constants won't change:
-long varB = 8364550;                        //  variavel B da equação "F(x)=a*x+b" = Tara zero
-int varA = 901;                 //  variavel A da equação aplicando "varB-convert/varA" 0,001111 unidade de grama901= n
-long grama = 0;                            //  VARIAVEL PARA TER PESO DA BALANÇA ATUALIADO
-int gramaMax = 0;                         // peso maximo registrado
+unsigned long convert=0;                     //  variavel recebida do HX711
+unsigned long previousMillis = 0;            //  will store last time LED was updated HX711
+unsigned long M1_previousMillis = 0;         // ultimo passo do motor 1
+const long interval = 20;                    //  original 100 constants won't change:
+long varB = 8364550;                         //  variavel B da equação "F(x)=a*x+b" = Tara zero
+int varA = 901;                              //  variavel A da equação aplicando "varB-convert/varA" 0,001111 unidade de grama901= n
+long grama = 0;                              //  VARIAVEL PARA TER PESO DA BALANÇA ATUALIADO
+int gramaMax = 0;                            // peso maximo registrado
 float gramaMaxNewton = 0;
-int maxima = 0;                             // angulo do peso maximo
-int varGrama = 0;                         //  variavel compensando inclinação da balança
+int maxima = 0;                              // angulo do peso maximo
+int varGrama = 0;                            //  variavel compensando inclinação da balança
 float varNewton = 0;  
-int media = 0;                             //
-int contagem = 0;                           //
+int media = 0;                               //
+int contagem = 0;                            //
 int unidadeM =1;                             // 1= GRAMA  0 = NEWTON
-unsigned long currentMillis = 0;            //
-bool zerar1 = LOW;                          //  registrador de execução 1 posição
-long zerar2 = 1;                           //  registrador de execução 2 posição
-int ponto1 = 0;                             //  definição do 1º ponto  , inicio da medida
+unsigned long currentMillis = 0;             //
+bool zerar1 = LOW;                           //  registrador de execução 1 posição
+long zerar2 = 1;                             //  registrador de execução 2 posição
+int ponto1 = 0;                              //  definição do 1º ponto  , inicio da medida
 int ponto2 = 90;                             //  definição do 2º ponto  , final da medida
 int val;
 int valD = 0;
-int M1possN = 0;                                //  varievel de nova posição para motor1
-int M1possA = 0;                                   //  variavel para posição atual do motor1
-int M1_RPM =2;                                  // VELOCIDADE DO MOTOR 1 DE ROTAÇÃO POR MINUTO
-int M1_tempo = (M1_VOLTA*M1_RPM)/60000;            // VELOCIDADE DO MOTOR 1 NUMERO DE PASSOS p/ REVOLUÇÃO *RPM / 60000 milisegundos
-bool dr;                                    //  registrador do botão direito
-bool es;                                    //  registrador do bottão esquerdo
+int M1possN = 0;                             //  varievel de nova posição para motor1
+int M1possA = 0;                             //  variavel para posição atual do motor1
+int M1_RPM =2;                               // VELOCIDADE DO MOTOR 1 DE ROTAÇÃO POR MINUTO
+int M1_tempo = (M1_VOLTA*M1_RPM)/60000;      // VELOCIDADE DO MOTOR 1 NUMERO DE PASSOS p/ REVOLUÇÃO *RPM / 60000 milisegundos
+bool dr;                                     //  registrador do botão direito
+bool es;                                     //  registrador do bottão esquerdo
 // menus
-int QTDEdeMenus = 3;            //  numero de opções no menu principal
-int menuPricipal = 1;           //  posição atual do menu principal
+int QTDEdeMenus = 3;                         //  numero de opções no menu principal
+int menuPricipal = 1;                        //  posição atual do menu principal
 bool sair;
 int teclas = 0;
 int menu_num = 1;
 int sub_menu = 1;
 
 // ---Variáveis alocação de Memoria ---
-int  M_varB =10 ;         //define o ponto de memmoria para salvar variavel long
-int  M_zerar1 =20;        //define o ponto de memmoria para salvar variavel bit 
-int  M_zerar2 =30 ;       //define o ponto de memmoria para salvar variavel long
+int  M_varB =10 ;                            //define o ponto de memmoria para salvar variavel long
+int  M_zerar1 =20;                           //define o ponto de memmoria para salvar variavel bit 
+int  M_zerar2 =30 ;                          //define o ponto de memmoria para salvar variavel long
 int M_unidadeM=40;
 
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2); //pinos do LCD 12=4-RS , 11=6-E , 5=11-D4 , 4= 12-D5 , 3=13-D6 , 2=14-D7
-bool atuador;                          // CONTROLE DO ATUADOR
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);       //pinos do LCD 12=4-RS , 11=6-E , 5=11-D4 , 4= 12-D5 , 3=13-D6 , 2=14-D7
+bool atuador;                                // CONTROLE DO ATUADOR
 
 //==============================================================================================================================================================================================================================
 // --- Configurações Iniciais ---
 void setup()
 {
-  lcd.begin(20, 4);                 //  iniciar modulo de LCD 
-  pinMode(ADDO, INPUT);      //  entrada para receber os dados
-  pinMode(ADSK, OUTPUT);            //  saída para SCK
-  pinMode(M1_LADO, OUTPUT);             //  saida do led
-  pinMode(M1_PASSO, OUTPUT);             //  saida do led
-  digitalWrite(M1_PASSO, LOW); // completa o passo do motor 
-  pinMode(LED, OUTPUT);             //  saida do led
-  pinMode(TRAVA, INPUT_PULLUP);     //  botão pullup
-  pinMode(MENU, INPUT_PULLUP);      //  botão pullup
-  pinMode(ESQUERDA, INPUT_PULLUP);  //  botão pullup
-  pinMode(DIREITA, INPUT_PULLUP);   //  botão pullup
-  pinMode(SAIR, INPUT_PULLUP);      //  botão pullup
-  pinMode(FIM_CURSO ,INPUT_PULLUP); //  Swich do fim de curso Motor1
-  pinMode(ATUADOR, OUTPUT);         //  Saida para atuador
-  valD = 0;                         //  Podição atual do motor1 
-  varB = EEPROMReadLong(M_varB);    //  carrega variavel com informações existente na memoria 
-  zerar1 = EEPROM.read(M_zerar1);   //  carrega variavel com informações existente na memoria 
-  zerar2= EEPROMReadLong(M_zerar2); //  carrega variavel com informações existente na memoria 
+  lcd.begin(20, 4);                          //  iniciar modulo de LCD 
+  pinMode(ADDO, INPUT);                      //  entrada para receber os dados
+  pinMode(ADSK, OUTPUT);                     //  saída para SCK
+  pinMode(M1_LADO, OUTPUT);                  //  saida do led
+  pinMode(M1_PASSO, OUTPUT);                 //  saida do led
+  digitalWrite(M1_PASSO, LOW);               // completa o passo do motor 
+  pinMode(LED, OUTPUT);                      //  saida do led
+  pinMode(TRAVA, INPUT_PULLUP);              //  botão pullup
+  pinMode(MENU, INPUT_PULLUP);               //  botão pullup
+  pinMode(ESQUERDA, INPUT_PULLUP);           //  botão pullup
+  pinMode(DIREITA, INPUT_PULLUP);            //  botão pullup
+  pinMode(SAIR, INPUT_PULLUP);               //  botão pullup
+  pinMode(FIM_CURSO ,INPUT_PULLUP);          //  Swich do fim de curso Motor1
+  pinMode(ATUADOR, OUTPUT);                  //  Saida para atuador
+  valD = 0;                                  //  Posição atual do motor1 
+  varB = EEPROMReadLong(M_varB);             //  carrega variavel com informações existente na memoria 
+  zerar1 = EEPROM.read(M_zerar1);            //  carrega variavel com informações existente na memoria 
+  zerar2= EEPROMReadLong(M_zerar2);          //  carrega variavel com informações existente na memoria 
   
   // Incluir Função para acertar posição do motor de passo pelo fim de curso 
   //"fazer movimentação para localizar a posição do motor e certificar que o mesmo esta em ponto 
@@ -133,10 +133,10 @@ void setup()
 // --- Loop Infinito ---
 void loop()
 {
-  keyboard_menu();                      //fazer leitura do 
-  switch (menu_num)
+  keyboard_menu();                           //fazer leitura do teclado
+  switch (menu_num)                          // ir para menu escolhido pelo teclado
   {
-    case 1: menu1(); break;
+    case 1: menu1(); break;                  // Loop entra na Função do menu escolhido
     case 2: menu2(); break;
     case 3: menu3(); break;
     case 4: menu4(); break;
@@ -149,9 +149,9 @@ void loop()
 
 // --- Funções ---
 //OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-// --- Movimentar o motor de passo , se HIGH vai para LOW e vice versa
+// --- Movimentar o motor de passo 
 
- // o milles faz os passo acontecer em um x periodo, o problema que demora muito para ler o HX711 passando o tempo do passo
+ // o milles faz os passo acontecer em um x periodo,    #####o problema que demora muito para ler o HX711 passando o tempo do passo####
 
 void Motor1()  {
 if (millis() - M1_previousMillis >= M1_tempo && M1possN != M1possA){
@@ -181,6 +181,8 @@ int Teclas() {
 
 //OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 // -- Função do modulo HX711 - celula de carga
+
+// função igual ao encontrao no data sheet do  HX711
 unsigned long ReadCount()
 {
   unsigned long Count = 0;
@@ -205,11 +207,10 @@ unsigned long ReadCount()
 
 //OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 void LerMedia() {  // imprimir constantemente o peso da balança nas linhas 2 e 3
-  currentMillis = millis();
+  
 
-  if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
-    previousMillis = currentMillis;
+  if (millis() - previousMillis >= interval) { 
+    previousMillis = millis();
     contagem = contagem + 1; //passar contando o quantas vezes soma o peso
     convert = convert + ReadCount(); // soma o pesso para tirar a media
    
