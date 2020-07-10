@@ -1,0 +1,31 @@
+
+int  ADDO = 9;
+int ADSK = 8;
+unsigned long ReadCount();   //conversão AD do HX711
+
+void setup() {
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+
+
+  unsigned long Count = 0;
+  unsigned char i;
+
+   while (digitalRead(ADDO));
+
+  for (i = 0; i < 24; i++)
+  {
+    digitalWrite(ADSK, HIGH);
+    Count = Count << 1;
+    digitalWrite(ADSK, LOW);
+    if (digitalRead(ADDO)) Count++;
+
+  } //end for
+
+  digitalWrite(ADSK, HIGH);
+  Count = Count ^ 0x800000;
+  digitalWrite(ADSK, LOW);
+  
