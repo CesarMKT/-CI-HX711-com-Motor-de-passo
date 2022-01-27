@@ -1,1 +1,3 @@
 entendendo onde e como funciona quando adiciona um arquivo direto do browser
+
+E entendendo comits varios de uma só vez

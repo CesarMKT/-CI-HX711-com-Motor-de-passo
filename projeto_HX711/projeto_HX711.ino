@@ -1,3 +1,4 @@
+// teste Cesar aguardando ajuda
 /*
      Programa em C para funcionamento do CI HX711 com motor de passo
       Conversor AD para célula de carga

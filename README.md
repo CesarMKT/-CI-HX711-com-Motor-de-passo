@@ -17,4 +17,4 @@ Preciso controlar um motor de passo com o Driver A4988 e ler o CI HX711 ao mesmo
 
 Quem puder me ajudar ficarei muito grato!
 
-abraços.
+abraços. Deus abençoe a todos!
